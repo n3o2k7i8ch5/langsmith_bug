@@ -1,5 +1,6 @@
 import operator
 from pathlib import Path
+from time import sleep
 from typing import Annotated, TypedDict
 
 from langgraph.constants import START
@@ -22,28 +23,17 @@ class State(TypedDict):
 class Nodes:
 
     @staticmethod
-    def reasoner(state: State) -> dict:
+    def node_1(state: State) -> dict:
 
-        llm_with_tools = _create_llm_agent()
-
-        messages_with_tool_response = [
-            llm_with_tools.invoke(
-                """
-                You are an advanced codebase analysis agent designed to assist in identifying files within
-                a software repository that are relevant to solving specific issues.
-
-                Write a long nice essay about why icecream is the best food in the world.
-                """
-            )
-        ]
+        sleep(3)
 
         return {
-            "messages": messages_with_tool_response,
+            "messages": ["messages_with_tool_response"],
             "final_answer": []
         }
 
     @staticmethod
-    def parser(state: State) -> dict[str, list[Path]]:
+    def node_2(state: State) -> dict[str, list[Path]]:
         return {"final_answer": []}
 
 
@@ -51,12 +41,12 @@ class MyGraph(StateGraph):
     def __init__(self):
         super().__init__(State)
 
-        self.add_node(Nodes.reasoner.__name__, Nodes.reasoner)
-        self.add_node(Nodes.parser.__name__, Nodes.parser)
+        self.add_node(Nodes.node_1.__name__, Nodes.node_1)
+        self.add_node(Nodes.node_2.__name__, Nodes.node_2)
 
-        self.add_edge(START, Nodes.reasoner.__name__)
-        self.add_edge(Nodes.reasoner.__name__, Nodes.parser.__name__)
-        self.add_edge(Nodes.parser.__name__, END)
+        self.add_edge(START, Nodes.node_1.__name__)
+        self.add_edge(Nodes.node_1.__name__, Nodes.node_2.__name__)
+        self.add_edge(Nodes.node_2.__name__, END)
 
         self.compiled = self.compile()
 

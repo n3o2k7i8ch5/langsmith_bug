@@ -39,7 +39,7 @@ Tasks stuck in pending:
 But these tasks are finished: 
 ![But these tasks are finished](images/ss_2.png)
 
-## Probable cause of the bug:
+## Probable cause of the bug 1:
 
 This issue can be solved by getting rid of `with tracing_v2_enabled():`.  
 This can be done by replacing the function `run_task` in `minimal_reproduction/job.py` with the following code:
@@ -57,4 +57,21 @@ def run_task(task_id: str) -> dict:
     logger.info(f"Finished task {task_id}.")
 
     return {"some_value": 1}
+```
+
+## Probable cause of the bug 2:
+
+This issue can be also solved by switching the graph in `graph.py` to a single-node graph..  
+This can be done by replacing the `__init__` method in the `MyGraph` class in `minimal_reproduction/graph.py` with the following code:
+
+```python
+    def __init__(self):
+        super().__init__(State)
+
+        self.add_node(Nodes.node_1.__name__, Nodes.node_1)
+
+        self.add_edge(START, Nodes.node_1.__name__)
+        self.add_edge(Nodes.node_1.__name__, END)
+
+        self.compiled = self.compile()
 ```
