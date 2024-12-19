@@ -46,9 +46,6 @@ This can be done by replacing the function `run_task` in `minimal_reproduction/j
 
 ```python
 def run_task(task_id: str) -> dict:
-    """
-    Search related files using the FindFilesGraph from the deep_next_0_3 repository.
-    """
 
     logger.info(f"Running task {task_id}.")
 
