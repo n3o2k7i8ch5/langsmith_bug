@@ -61,7 +61,7 @@ def run_task(task_id: str) -> dict:
 
 ## Probable cause of the bug 2:
 
-This issue can be also solved by switching the graph in `graph.py` to a single-node graph..  
+This issue can be also solved by switching the graph in `graph.py` to a single-node graph (instead of the two-node graph).  
 This can be done by replacing the `__init__` method in the `MyGraph` class in `minimal_reproduction/graph.py` with the following code:
 
 ```python
